@@ -1,0 +1,97 @@
+byte start;
+int val1,val2,val4;
+
+int ENA=10;
+int IN1=3;
+int IN2=4;
+
+int ENB=11;
+int IN3=5;
+int IN4=6;
+ 
+ 
+ void setup(){
+   Serial.begin(9600);
+  pinMode(ENA,OUTPUT);
+  pinMode(IN1,OUTPUT); 
+  pinMode(IN2,OUTPUT);
+  pinMode(IN3,OUTPUT);
+  pinMode(IN4,OUTPUT);
+  pinMode(ENB,OUTPUT);
+  
+}
+void loop(){
+  
+  if (Serial.available()){
+  start=Serial.read();
+  
+  if (start=='>'){
+   val1=Serial.read();
+  val2=Serial.read();
+  }
+  if ((val1==255)&&(val2>128)){
+    val4=map(val2,128,255,255,0);
+    right(val4);
+  }
+  
+  if ((val1==255)&&(val2<128)){
+    val4=map(val2,128,0,255,0);
+    left(val4);
+  }
+  if ((val1==255)&&(val2==128)){
+    
+    forward(255);
+  }
+  
+  if (val1==0){
+    Stop();}
+  
+ delay(30);   
+}
+}
+void forward(int val3){
+ analogWrite(ENA,val3);
+ analogWrite(ENB,val3);
+ digitalWrite(IN1,1);
+ digitalWrite(IN2,0);
+ digitalWrite(IN3,1);
+ digitalWrite(IN4,0);
+}
+
+void backward(int val3){
+  
+ analogWrite(ENA,val3);
+ analogWrite(ENB,val3);
+ digitalWrite(IN1,0);
+ digitalWrite(IN2,1);
+ digitalWrite(IN3,0);
+ digitalWrite(IN4,1);
+}
+
+void left(int val3)
+{
+   analogWrite(ENA,255);
+ analogWrite(ENB,val3);
+ digitalWrite(IN1,0);
+ digitalWrite(IN2,1);
+ digitalWrite(IN3,1);
+ digitalWrite(IN4,0);
+}
+
+void right(int val3){
+  analogWrite(ENA,val3);
+ analogWrite(ENB,255);
+ digitalWrite(IN1,0);
+ digitalWrite(IN2,1);
+ digitalWrite(IN3,1);
+ digitalWrite(IN4,0);
+}
+
+void Stop(){
+  analogWrite(ENA,0);
+ analogWrite(ENB,0);
+ digitalWrite(IN1,0);
+ digitalWrite(IN2,0);
+ digitalWrite(IN3,0);
+ digitalWrite(IN4,0);
+}
